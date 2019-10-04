@@ -1,3 +1,6 @@
-﻿*.import
+﻿export/
+*.import
+
+# Generated assets
 res/*.png
 res/*.json
