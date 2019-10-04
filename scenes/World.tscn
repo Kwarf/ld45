@@ -9,3 +9,6 @@
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 27.138, 17.9868 )
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+current = true
