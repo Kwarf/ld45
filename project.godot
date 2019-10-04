@@ -27,7 +27,7 @@ window/stretch/shrink=4.0
 
 [editor_plugins]
 
-enabled=PoolStringArray( "vnen.tiled_importer" )
+enabled=PoolStringArray( "AsepriteAnimSetter", "vnen.tiled_importer" )
 
 [rendering]
 
