@@ -6,7 +6,10 @@ const X_SPEED_MAX = 100
 const R_FORCE = 1000
 const J_VELOCITY = 150
 
+signal landed
+
 var velocity = Vector2()
+var was_on_floor = is_on_floor()
 
 func _physics_process(delta):
 	var force = Vector2(0, GRAVITY)
@@ -32,6 +35,11 @@ func _physics_process(delta):
 	elif is_on_floor():
 		$AnimationPlayer.play("Running")
 		$Sprite.flip_h = velocity.x < 0
+		
+	# Screen shake
+	if is_on_floor() and not was_on_floor:
+		emit_signal("landed")
+	was_on_floor = is_on_floor()
 
 	velocity += force * delta
 	velocity = move_and_slide(velocity, Vector2(0, -1))
