@@ -32,15 +32,14 @@ func _physics_process(delta):
 				open()
 			else:
 				var tie = get_viewport().get_node("World").find_node("TextInterfaceEngine") as TextInterfaceEngine
-				tie.buff_text("It's locked...", 0.05)
+				tie.buff_text("It's locked solid...", 0.03)
 				tie.set_state(tie.STATE_OUTPUT)
 
 func _on_body_in_proximity(body : PhysicsBody2D) -> void:
 	var player := body as Player
 	if player != null:
 		self.player = player
-		if not locked:
-			$InteractIndicator.visible = true
+		$InteractIndicator.visible = true
 
 
 func _on_body_left(body : PhysicsBody2D) -> void:

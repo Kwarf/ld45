@@ -25,8 +25,10 @@ func _on_door_interacted():
 		tie.set_state(tie.STATE_OUTPUT)
 	elif interaction_cnt < 3:
 		get_node(\"../../Camera2D\").add_trauma(interaction_cnt * 0.2)
-	else:
+	elif interaction_cnt < 4:
 		get_node(\"../../Camera2D\").add_trauma(1)
+		door.open()
+	else:
 		door.open()
 
 	interaction_cnt += 1"
@@ -53,7 +55,7 @@ tile_data = PoolIntArray( 196609, 4, 0 )
 
 [node name="Door" parent="." instance=ExtResource( 2 )]
 position = Vector2( 72, 64 )
-target_map = "res://scenes/Block.tscn"
+target_map = "Block"
 target_spawn = "Door"
 locked = true
 interactable = false

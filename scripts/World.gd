@@ -1,9 +1,9 @@
 extends Node
 class_name GameWorld
 
-onready var player_scn: PackedScene = preload("res://scenes/Player.tscn")
-onready var map_cell_scn: PackedScene = preload("res://scenes/Cell.tscn")
-onready var block_scn: PackedScene = preload("res://scenes/Block.tscn")
+onready var player_scn: Node = load("res://scenes/Player.tscn").instance()
+onready var map_cell_scn: Node = load("res://scenes/Cell.tscn").instance()
+onready var block_scn: Node = load("res://scenes/Block.tscn").instance()
 
 onready var maps: Array = [
 	map_cell_scn,
@@ -12,13 +12,13 @@ onready var maps: Array = [
 
 var player: Player = null
 var current_map: Node = null
-var next_map: PackedScene = null
+var next_map: Node = null
 var next_spawn: String = ""
 
 const LEVEL_CHANGE_DELAY = 0.5
 
 func _ready():
-	player = player_scn.instance()
+	player = player_scn
 	$Player.add_child(player)
 
 	next_spawn = "Spawn"
@@ -38,19 +38,18 @@ func _on_fadeout_complete(object : Object, key : NodePath):
 	if next_map != null:
 		_set_level(next_map)
 
-func _find_level_by_name(name : String) -> PackedScene:
+func _find_level_by_name(name : String) -> Node:
 	for map in maps:
-		if (map as PackedScene).resource_path == name:
+		if map.name == name:
 			return map
 	return null
 
-func _set_level(scene : PackedScene):
+func _set_level(scene : Node):
 	# Swap out the map (if any)
 	if current_map != null:
-		current_map.queue_free()
-		remove_child(current_map)
+		$Map.remove_child(current_map)
 
-	current_map = scene.instance()
+	current_map = scene
 	$Map.add_child(current_map)
 
 	# Re-position the player
