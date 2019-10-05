@@ -1,6 +1,40 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scripts/World.gd" type="Script" id=1]
+[ext_resource path="res://res/messagebox.png" type="Texture" id=2]
+[ext_resource path="res://addons/GodotTIE/text_interface_engine.gd" type="Script" id=3]
+[ext_resource path="res://addons/GodotTIE/GodotTIE_icon.png" type="Texture" id=4]
+[ext_resource path="res://res/Cave-Story.ttf" type="DynamicFontData" id=5]
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends TextureRect
+
+onready var player_container = get_node(\"../../Player\")
+
+var awaiting_confirmation = false
+
+func _ready():
+	$TextInterfaceEngine.connect(\"state_change\", self, \"_on_text_state_change\")
+
+func _physics_process(delta):
+	if not awaiting_confirmation:
+		return
+
+	if Input.is_action_just_pressed(\"interact\"):
+		visible = false
+		player_container.get_node(\"Player\").allow_input = true
+		$TextInterfaceEngine.reset()
+		awaiting_confirmation = false
+
+func _on_text_state_change(state: int) -> void:
+	if state == $TextInterfaceEngine.STATE_OUTPUT:
+		visible = true
+		player_container.get_node(\"Player\").allow_input = false
+	else:
+		awaiting_confirmation = true"
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 5 )
 
 [node name="World" type="Node"]
 script = ExtResource( 1 )
@@ -10,6 +44,25 @@ script = ExtResource( 1 )
 [node name="Player" type="Node" parent="."]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+visible = false
+anchor_bottom = 1.0
+margin_top = 71.0
+margin_right = 480.0
+texture = ExtResource( 2 )
+script = SubResource( 2 )
+
+[node name="TextInterfaceEngine" type="ReferenceRect" parent="CanvasLayer/TextureRect"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 230.0
+margin_bottom = 54.0
+script = ExtResource( 3 )
+__meta__ = {
+"_editor_icon": ExtResource( 4 )
+}
+FONT = SubResource( 1 )
 
 [node name="FadeOut" type="ColorRect" parent="CanvasLayer"]
 anchor_right = 1.0

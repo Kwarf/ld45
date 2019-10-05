@@ -1,7 +1,35 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://res/tileset.tres" type="TileSet" id=1]
 [ext_resource path="res://scenes/Door.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/Camera.gd" type="Script" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node
+
+onready var door: Door = get_parent()
+onready var tie: TextInterfaceEngine = get_viewport().get_node(\"World\").find_node(\"TextInterfaceEngine\")
+
+var interaction_cnt: int = 0
+
+func _ready():
+	door.connect(\"interacted\", self, \"_on_door_interacted\")
+
+func _on_door_interacted():
+	if interaction_cnt == 0:
+		tie.buff_text(\"It's locked... \", 0.05)
+		tie.buff_silence(0.5)
+		tie.buff_text(\"But I could probably \", 0.05)
+		tie.buff_text(\"kick \", 0.2)
+		tie.buff_text(\"it open...\", 0.05)
+		tie.set_state(tie.STATE_OUTPUT)
+	elif interaction_cnt < 3:
+		get_node(\"../../Camera2D\").add_trauma(interaction_cnt * 0.2)
+	else:
+		get_node(\"../../Camera2D\").add_trauma(1)
+		door.open()
+
+	interaction_cnt += 1"
 
 [node name="Cell" type="Node2D"]
 
@@ -27,10 +55,16 @@ tile_data = PoolIntArray( 196609, 4, 0 )
 position = Vector2( 72, 64 )
 target_map = "res://scenes/Block.tscn"
 target_spawn = "Door"
+locked = true
+interactable = false
+
+[node name="Node" type="Node" parent="Door"]
+script = SubResource( 1 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 56, 48 )
 current = true
+script = ExtResource( 3 )
 __meta__ = {
 "_edit_lock_": true
 }

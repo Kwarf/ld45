@@ -4,10 +4,15 @@ class_name Door
 export(String) var target_map
 export(String) var target_spawn := "Spawn"
 export(bool) var locked := false
+export(bool) var interactable := true
 
 signal interacted
 
 var player: Player = null
+
+func open():
+	$AnimationPlayer.play("Open")
+	get_viewport().get_node("World").change_level(target_map, target_spawn)
 
 func close():
 	$AnimationPlayer.play_backwards("Open")
@@ -17,14 +22,18 @@ func _ready():
 	$Area2D.connect("body_exited", self, "_on_body_left")
 
 func _physics_process(delta):
-	if player == null:
+	if player == null or not player.allow_input:
 		return
 
-	if Input.is_action_pressed("interact"):
+	if Input.is_action_just_pressed("interact"):
 		emit_signal("interacted")
-		if not locked:
-			$AnimationPlayer.play("Open")
-			get_viewport().get_node("World").change_level(target_map, target_spawn)
+		if interactable:
+			if not locked:
+				open()
+			else:
+				var tie = get_viewport().get_node("World").find_node("TextInterfaceEngine") as TextInterfaceEngine
+				tie.buff_text("It's locked...", 0.05)
+				tie.set_state(tie.STATE_OUTPUT)
 
 func _on_body_in_proximity(body : PhysicsBody2D) -> void:
 	var player := body as Player

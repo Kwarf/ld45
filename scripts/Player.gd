@@ -16,7 +16,7 @@ var velocity = Vector2()
 func _physics_process(delta):
 	var force = Vector2(0, GRAVITY)
 	var has_input = false
-	var factor = 1 if is_on_floor() else AIR_DAMP
+	var factor = 1.0 if is_on_floor() else AIR_DAMP
 
 	# Movement
 	if allow_input:

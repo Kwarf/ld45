@@ -23,3 +23,6 @@ REM Static sprites
 
  %ASEPRITE% -b interact.ase^
  --save-as ..\res\interact.png
+
+ %ASEPRITE% -b messagebox.ase^
+ --save-as ..\res\messagebox.png

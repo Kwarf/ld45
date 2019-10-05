@@ -23,11 +23,17 @@ _global_script_classes=[ {
 "class": "Player",
 "language": "GDScript",
 "path": "res://scripts/Player.gd"
+}, {
+"base": "ReferenceRect",
+"class": "TextInterfaceEngine",
+"language": "GDScript",
+"path": "res://addons/GodotTIE/text_interface_engine.gd"
 } ]
 _global_script_class_icons={
 "Door": "",
 "GameWorld": "",
-"Player": ""
+"Player": "",
+"TextInterfaceEngine": ""
 }
 
 [application]

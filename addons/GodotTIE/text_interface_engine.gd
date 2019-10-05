@@ -4,6 +4,7 @@
 
 # Intern initializations
 extends ReferenceRect # Extends from ReferenceFrame
+class_name TextInterfaceEngine
 
 const _ARRAY_CHARS = [" ","!","\"","#","$","%","&","'","(",")","*","+",",","-",".","/","0","1","2","3","4","5","6","7","8","9",":",";","<","=",">","?","@","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","[","\\","]","^","_","`","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","{","|","}","~"]
 
@@ -36,7 +37,7 @@ onready var _blink_input_timer = 0
 onready var _input_timer_limit = 1
 onready var _input_index = 0
 
-# =============================================== 
+# ===============================================
 # Text display properties!
 export(bool) var SCROLL_ON_MAX_LINES = true # If this is true, the text buffer update will stop after reaching the maximum number of lines; else, it will stop to wait for user input, and than clear the text.
 export(bool) var BREAK_ON_MAX_LINES = true # If the text output pauses waiting for the user when reaching the maximum number of lines
@@ -92,7 +93,7 @@ func buff_input(tag = "", push_front = false): # 'Schedule' a change state to In
 		_buffer.append(b)
 	else:
 		_buffer.push_front(b)
-		
+
 func buff_clear(tag = "", push_front = false): # Clear the text buffer when this buffer command is run.
 	var b = {"buff_type":BUFF_CLEAR, "buff_tag":tag}
 	if !push_front:
@@ -108,7 +109,7 @@ func clear_buffer(): # Clears all buffs in _buffer
 	_on_break = false
 	set_state(STATE_WAITING)
 	_buffer.clear()
-	
+
 	_output_delay = 0
 	_output_delay_limit = 0
 	_buff_beginning = true
@@ -167,13 +168,13 @@ func set_buff_speed(v): # Changes the velocity of the text being printed
 func _ready():
 	set_physics_process(true)
 	set_process_input(true)
-	
+
 	add_child(_label)
-	
+
 	# Setting font of the text
 	if(FONT != null):
 		_label.add_font_override("font", FONT)
-	
+
 	# Setting size of the frame
 	_max_lines = floor(get_size().y/(_label.get_line_height()+_label.get_constant("line_spacing")))
 	_label.set_size(Vector2(get_size().x,get_size().y))
@@ -185,9 +186,9 @@ func _physics_process(delta):
 			set_state(STATE_WAITING)
 			emit_signal("buff_end")
 			return
-		
+
 		var o = _buffer[0] # Calling this var 'o' was one of my biggest mistakes during the development of this code. I'm sorry about this.
-		
+
 		if (o["buff_type"] == BUFF_DEBUG): # ---- It's a debug! ----
 			if(o["debug_label"] == false):
 				if(o["debug_arg"] == null):
@@ -202,13 +203,13 @@ func _physics_process(delta):
 			_buffer.pop_front()
 		elif (o["buff_type"] == BUFF_TEXT): # ---- It's a text! ----
 			# -- Print Text --
-			
+
 			if(o["buff_tag"] != "" and _buff_beginning == true):
 				emit_signal("tag_buff", o["buff_tag"])
-			
+
 			if (_turbo): # In case of turbo, print everything on this buff
 				o["buff_vel"] = 0
-			
+
 			if(o["buff_vel"] == 0): # If the velocity is 0, than just print everything
 				while(o["buff_text"] != ""): # Not optimal (not really printing everything at the same time); but is the only way to work with line break
 					if(AUTO_SKIP_WORDS and (o["buff_text"][0] == " " or _buff_beginning)):
@@ -218,7 +219,7 @@ func _physics_process(delta):
 					o["buff_text"] = o["buff_text"].right(1)
 					if(_max_lines_reached == true):
 						break
-					
+
 			else: # Else, print each character according to velocity
 				_output_delay_limit = o["buff_vel"]
 				if(_buff_beginning):
@@ -275,7 +276,7 @@ func _physics_process(delta):
 			if(_blink_input_timer > _input_timer_limit):
 				_blink_input_timer -= _input_timer_limit
 				_blink_input()
-	
+
 	pass
 
 func _input(event):
@@ -294,8 +295,8 @@ func _input(event):
 				_on_break = false
 		elif(_state == 2): # If its on the input state
 			if(BLINKING_INPUT): # Stop blinking line while inputing
-				_blink_input(true) 
-			
+				_blink_input(true)
+
 			var input = _label.get_text().right(_input_index) # Get Input
 			input = input.replace("\n","")
 
@@ -309,7 +310,7 @@ func _input(event):
 						_delete_last_character()
 						i-=1
 				set_state(STATE_OUTPUT)
-			
+
 			elif(event.unicode >= 32 and event.unicode <= 126): # Add character
 				if(INPUT_CHARACTERS_LIMIT < 0 or input.length() < INPUT_CHARACTERS_LIMIT):
 					_label_print(_ARRAY_CHARS[event.unicode-32])
@@ -361,7 +362,7 @@ func _has_to_skip_word(word): # what an awful name
 
 func _skip_word():
 	var ot = _buffer[0]["buff_text"]
-	
+
 	# which comes first, a space or a new line (else, till the end)
 	var f_space = ot.findn(" ",1)
 	if f_space == -1:
@@ -370,11 +371,11 @@ func _skip_word():
 	if f_newline == -1:
 		f_newline = ot.length()
 	var length = min(f_space, f_newline)
-	
+
 	if(_has_to_skip_word(ot.substr(0,length))):
-		
+
 		if(_buffer[0]["buff_text"][0] == " "):
-			
+
 			_buffer[0]["buff_text"][0] = "\n"
 		else:
 			_buffer[0]["buff_text"] = _buffer[0]["buff_text"].insert(0,"\n")
@@ -388,25 +389,25 @@ func _label_print(t): # Add text to the label
 			if(_blink_input_visible == true):
 				_blink_input(true)
 				return
-			
+
 			if(_state == 1 and BREAK_ON_MAX_LINES and _max_lines_reached == false): # Add a break when maximum lines are reached
 				_delete_last_character()
 				_max_lines_reached = true
 				_buffer[0]["buff_text"] = t + _buffer[0]["buff_text"]
 				buff_break("", true)
 				return t
-			
+
 			if(_max_lines_reached): # Reset maximum lines break
 				_max_lines_reached = false
-			
+
 			if(SCROLL_ON_MAX_LINES): # Scroll text, or clear everything
 				_label.set_lines_skipped(_label.get_lines_skipped()+1)
 			else:
 				_label.set_lines_skipped(_label.get_lines_skipped()+_max_lines)
-		
+
 		if (t != "\n" and n > 0): # Add a line breaker, so the engine will be able to get each line
 			_label.set_text(_label.get_text().insert( _label.get_text().length()-1,"\n"))
-		
+
 		if(LOG_SKIPPED_LINES == false): # Delete skipped lines
 			_clear_skipped_lines()
 	return t
