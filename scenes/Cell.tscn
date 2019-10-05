@@ -25,7 +25,7 @@ tile_data = PoolIntArray( 196609, 4, 0 )
 
 [node name="Door" parent="." instance=ExtResource( 2 )]
 position = Vector2( 72, 64 )
-target_map = "res://scenes/Map 1.tscn"
+target_map = "res://scenes/Block.tscn"
 target_spawn = "Door"
 
 [node name="Camera2D" type="Camera2D" parent="."]

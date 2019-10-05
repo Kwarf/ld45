@@ -54,6 +54,7 @@ position = Vector2( 8, -32 )
 texture = ExtResource( 3 )
 
 [node name="Area2D" type="Area2D" parent="."]
+editor/display_folded = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2( 8, -12 )

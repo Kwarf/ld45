@@ -3,11 +3,11 @@ class_name GameWorld
 
 onready var player_scn: PackedScene = preload("res://scenes/Player.tscn")
 onready var map_cell_scn: PackedScene = preload("res://scenes/Cell.tscn")
-onready var map_1_scn: PackedScene = preload("res://scenes/Map 1.tscn")
+onready var block_scn: PackedScene = preload("res://scenes/Block.tscn")
 
 onready var maps: Array = [
 	map_cell_scn,
-	map_1_scn
+	block_scn
 ]
 
 var player: Player = null
@@ -59,6 +59,14 @@ func _set_level(scene : PackedScene):
 	if spawn is Door: # HACK
 		player.position.x += 16
 		spawn.close()
+
+	# Select camera
+	var map_cam = current_map.get_node("Camera2D")
+	if map_cam != null:
+		map_cam.current = true
+		player.get_node("Camera2D").current = false
+	else:
+		player.get_node("Camera2D").current = true
 
 	# Fade back
 	$CanvasLayer/Fade.interpolate_property($CanvasLayer/FadeOut, "color", null, Color(0, 0, 0, 0), LEVEL_CHANGE_DELAY, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
