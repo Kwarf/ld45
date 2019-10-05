@@ -46,7 +46,7 @@ window/stretch/shrink=4.0
 
 [editor_plugins]
 
-enabled=PoolStringArray( "AsepriteAnimSetter" )
+enabled=PoolStringArray( "AsepriteAnimSetter", "GodotTIE" )
 
 [importer_defaults]
 
