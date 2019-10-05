@@ -27,7 +27,7 @@ window/stretch/shrink=4.0
 
 [editor_plugins]
 
-enabled=PoolStringArray( "AsepriteAnimSetter", "vnen.tiled_importer" )
+enabled=PoolStringArray( "AsepriteAnimSetter" )
 
 [importer_defaults]
 
@@ -87,6 +87,7 @@ jump={
 quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
+environment/default_clear_color=Color( 0.454902, 0.490196, 0.533333, 1 )
 environment/default_environment="res://default_env.tres"
 
 [tiled_importer]
