@@ -1,6 +1,7 @@
 extends Node
 class_name GameWorld
 
+onready var start_time: int = OS.get_unix_time()
 onready var player_scn: Node = load("res://scenes/Player.tscn").instance()
 onready var map_cell_scn: Node = load("res://scenes/Cell.tscn").instance()
 onready var block_scn: Node = load("res://scenes/Block.tscn").instance()
@@ -14,6 +15,7 @@ onready var maps: Array = [
 	key_room_scn
 ]
 
+var death_counter: int = 0
 var player: Player = null
 var current_map: Node = null
 var next_map: Node = null
@@ -39,6 +41,7 @@ func change_level(name : String, spawn : String) -> void:
 	$CanvasLayer/Fade.start()
 
 func kill_and_reset_player() -> void:
+	death_counter += 1
 	player.get_node("HurtSound").play()
 	# Fade out
 	$CanvasLayer/Fade.connect("tween_completed", self, "_on_kill_fadeout_complete")
@@ -52,8 +55,8 @@ func victory() -> void:
 	$CanvasLayer/Fade.start()
 
 func _on_credit_fadeout_complete(object : Object, key : NodePath) -> void:
-	$CanvasLayer/CreditTextEngine.buff_text("You escaped the dungeon!\n", 0.05)
-	$CanvasLayer/CreditTextEngine.buff_silence(1)
+	$CanvasLayer/CreditTextEngine.buff_text("You escaped the dungeon in " + str(OS.get_unix_time() - start_time) + " seconds, and you died " + str(death_counter) + " time(s)!\n", 0.05)
+	$CanvasLayer/CreditTextEngine.buff_silence(0.5)
 	$CanvasLayer/CreditTextEngine.buff_text("Thanks for playing", 0.05)
 	$CanvasLayer/CreditTextEngine.set_state($CanvasLayer/CreditTextEngine.STATE_OUTPUT)
 
