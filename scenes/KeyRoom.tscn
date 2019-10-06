@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://res/tileset.tres" type="TileSet" id=1]
+[ext_resource path="res://scenes/Door.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/Key.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scripts/Camera.gd" type="Script" id=4]
+
+[node name="KeyRoom" type="Node2D"]
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 16, 16 )
+format = 1
+tile_data = PoolIntArray( 0, 0, 65541, 1, 0, 131073, 2, 0, 131073, 3, 0, 131073, 4, 0, 131073, 5, 0, 131073, 6, 0, 65542, 65536, 0, 65538, 65537, 2, 0, 65538, 2, 0, 65539, 2, 0, 65540, 2, 0, 65541, 2, 0, 65542, 0, 65536, 131072, 0, 65538, 131073, 2, 0, 131074, 3, 0, 131075, 2, 0, 131076, 2, 0, 131077, 2, 0, 131078, 0, 65536, 196608, 0, 65538, 196609, 2, 0, 196610, 2, 0, 196611, 2, 0, 196612, 2, 0, 196613, 2, 0, 196614, 0, 65536, 262144, 0, 65538, 262145, 1, 0, 262146, 1, 0, 262147, 1, 0, 262148, 1, 0, 262149, 1, 0, 262150, 0, 65536, 327680, 0, 131077, 327681, 0, 1, 327682, 0, 1, 327683, 0, 1, 327684, 0, 1, 327685, 0, 1, 327686, 0, 131078 )
+
+[node name="PlatformingDoor" parent="." instance=ExtResource( 2 )]
+position = Vector2( 72, 64 )
+target_map = "Platforming"
+target_spawn = "KeyDoor"
+
+[node name="Key" parent="." instance=ExtResource( 3 )]
+position = Vector2( 32, 64 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 56, 48 )
+script = ExtResource( 4 )

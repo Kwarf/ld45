@@ -32,3 +32,4 @@ target_spawn = "BlockDoor"
 [node name="Door2" parent="OtherDoors" instance=ExtResource( 2 )]
 position = Vector2( 232, 64 )
 locked = true
+outdoor = true

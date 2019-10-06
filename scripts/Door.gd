@@ -5,6 +5,7 @@ export(String) var target_map
 export(String) var target_spawn := "Spawn"
 export(bool) var locked := false
 export(bool) var interactable := true
+export(bool) var outdoor := false
 
 signal interacted
 
@@ -20,6 +21,8 @@ func close():
 func _ready():
 	$Area2D.connect("body_entered", self, "_on_body_in_proximity")
 	$Area2D.connect("body_exited", self, "_on_body_left")
+	if outdoor:
+		$AnimationPlayer.play("Outdoor")
 
 func _physics_process(delta):
 	if player == null or not player.allow_input:
@@ -29,7 +32,10 @@ func _physics_process(delta):
 		emit_signal("interacted")
 		if interactable:
 			if not locked or player.has_key:
-				open()
+				if not outdoor:
+					open()
+				else:
+					get_viewport().get_node("World").victory()
 			else:
 				var tie = get_viewport().get_node("World").find_node("TextInterfaceEngine") as TextInterfaceEngine
 				tie.buff_text("It's locked solid...", 0.03)

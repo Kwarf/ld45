@@ -5,11 +5,13 @@ onready var player_scn: Node = load("res://scenes/Player.tscn").instance()
 onready var map_cell_scn: Node = load("res://scenes/Cell.tscn").instance()
 onready var block_scn: Node = load("res://scenes/Block.tscn").instance()
 onready var platforming_scn: Node = load("res://scenes/Platforming.tscn").instance()
+onready var key_room_scn: Node = load("res://scenes/KeyRoom.tscn").instance()
 
 onready var maps: Array = [
 	map_cell_scn,
 	block_scn,
-	platforming_scn
+	platforming_scn,
+	key_room_scn
 ]
 
 var player: Player = null
@@ -26,8 +28,8 @@ func _ready():
 
 #	next_spawn = "Spawn"
 #	_set_level(map_cell_scn)
-	next_spawn = "BlockDoor"
-	_set_level(platforming_scn)
+	next_spawn = "CellDoor"
+	_set_level(block_scn)
 
 func change_level(name : String, spawn : String) -> void:
 	player.allow_input = false
@@ -43,6 +45,18 @@ func kill_and_reset_player() -> void:
 	$CanvasLayer/Fade.connect("tween_completed", self, "_on_kill_fadeout_complete")
 	$CanvasLayer/Fade.interpolate_property($CanvasLayer/FadeOut, "color", Color(0, 0, 0, 0), Color.black, KILL_RESET_DELAY, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$CanvasLayer/Fade.start()
+
+func victory() -> void:
+	get_tree().paused = true
+	$CanvasLayer/Fade.connect("tween_completed", self, "_on_credit_fadeout_complete")
+	$CanvasLayer/Fade.interpolate_property($CanvasLayer/FadeOut, "color", null, Color.white, 1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$CanvasLayer/Fade.start()
+
+func _on_credit_fadeout_complete(object : Object, key : NodePath) -> void:
+	$CanvasLayer/CreditTextEngine.buff_text("You escaped the dungeon!\n", 0.05)
+	$CanvasLayer/CreditTextEngine.buff_silence(1)
+	$CanvasLayer/CreditTextEngine.buff_text("Thanks for playing", 0.05)
+	$CanvasLayer/CreditTextEngine.set_state($CanvasLayer/CreditTextEngine.STATE_OUTPUT)
 
 func _on_kill_fadeout_complete(object : Object, key : NodePath) -> void:
 	var spawn = current_map.get_node(next_spawn)
@@ -79,12 +93,15 @@ func _set_level(scene : Node):
 		spawn.close()
 
 	# Select camera
-	var map_cam = current_map.get_node("Camera2D")
+	var map_cam = current_map.get_node_or_null("Camera2D")
 	if map_cam != null:
 		map_cam.current = true
 		player.get_node("Camera2D").current = false
 	else:
 		player.get_node("Camera2D").current = true
+
+	# HACK: Reset stuck hazards
+	reset($Map)
 
 	# Fade back
 	$CanvasLayer/Fade.disconnect("tween_completed", self, "_on_map_change_fadeout_complete")
@@ -94,3 +111,10 @@ func _set_level(scene : Node):
 	# Reset
 	player.allow_input = true
 	next_map = null
+
+func reset(node : Node):
+	for n in node.get_children():
+		if n.get_child_count() > 0:
+			reset(n)
+		if n.name.match("DropBlock*"):
+			n.position = n.initial_position

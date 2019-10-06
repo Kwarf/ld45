@@ -43,6 +43,13 @@ func _on_trigger_exited(body : PhysicsBody2D) -> void:
 
 func _on_fallen(object : Object, key : NodePath) -> void:
 	if triggered and should_reset:
+		var map = get_viewport().get_node("World/Map")
+		var world_cam = map.find_node("Camera2D", true, false)
+		if world_cam != null:
+			world_cam.add_trauma(0.5)
+		else:
+			get_viewport().get_node("World/Player/Player/Camera2D").add_trauma(0.5)
+
 		triggered = false
 		$Tween.interpolate_property(self, "position", null, initial_position, 3, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$Tween.start()
