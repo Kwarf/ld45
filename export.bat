@@ -1,5 +1,5 @@
 @echo off
-set EXE_NAME=ld45
+set EXE_NAME=esc
 
 if exist export rmdir /s /q export
 

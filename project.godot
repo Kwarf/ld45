@@ -38,7 +38,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="LD45"
+config/name="Esc"
 run/main_scene="res://scenes/World.tscn"
 config/icon="res://icon.png"
 
