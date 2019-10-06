@@ -6,7 +6,7 @@
 [ext_resource path="res://addons/GodotTIE/GodotTIE_icon.png" type="Texture" id=4]
 [ext_resource path="res://res/Cave-Story.ttf" type="DynamicFontData" id=5]
 
-[sub_resource type="GDScript" id=2]
+[sub_resource type="GDScript" id=1]
 script/source = "extends TextureRect
 
 onready var player_container = get_node(\"../../Player\")
@@ -33,7 +33,7 @@ func _on_text_state_change(state: int) -> void:
 	else:
 		awaiting_confirmation = true"
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=2]
 font_data = ExtResource( 5 )
 
 [node name="World" type="Node"]
@@ -51,7 +51,7 @@ anchor_bottom = 1.0
 margin_top = 71.0
 margin_right = 480.0
 texture = ExtResource( 2 )
-script = SubResource( 2 )
+script = SubResource( 1 )
 
 [node name="TextInterfaceEngine" type="ReferenceRect" parent="CanvasLayer/TextureRect"]
 margin_left = 10.0
@@ -62,7 +62,7 @@ script = ExtResource( 3 )
 __meta__ = {
 "_editor_icon": ExtResource( 4 )
 }
-FONT = SubResource( 1 )
+FONT = SubResource( 2 )
 
 [node name="FadeOut" type="ColorRect" parent="CanvasLayer"]
 anchor_right = 1.0

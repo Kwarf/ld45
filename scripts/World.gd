@@ -16,24 +16,41 @@ var next_map: Node = null
 var next_spawn: String = ""
 
 const LEVEL_CHANGE_DELAY = 0.5
+const KILL_RESET_DELAY = 0.2
 
 func _ready():
 	player = player_scn
 	$Player.add_child(player)
 
-	next_spawn = "Spawn"
-	_set_level(map_cell_scn)
-
-	$CanvasLayer/Fade.connect("tween_completed", self, "_on_fadeout_complete")
+#	next_spawn = "Spawn"
+#	_set_level(map_cell_scn)
+	next_spawn = "Door"
+	_set_level(block_scn)
 
 func change_level(name : String, spawn : String) -> void:
 	player.allow_input = false
 	next_map = _find_level_by_name(name)
 	next_spawn = spawn
+	# Fade out
+	$CanvasLayer/Fade.connect("tween_completed", self, "_on_map_change_fadeout_complete")
 	$CanvasLayer/Fade.interpolate_property($CanvasLayer/FadeOut, "color", Color(0, 0, 0, 0), Color.black, LEVEL_CHANGE_DELAY, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$CanvasLayer/Fade.start()
 
-func _on_fadeout_complete(object : Object, key : NodePath):
+func kill_and_reset_player() -> void:
+	# Fade out
+	$CanvasLayer/Fade.connect("tween_completed", self, "_on_kill_fadeout_complete")
+	$CanvasLayer/Fade.interpolate_property($CanvasLayer/FadeOut, "color", Color(0, 0, 0, 0), Color.black, KILL_RESET_DELAY, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$CanvasLayer/Fade.start()
+
+func _on_kill_fadeout_complete(object : Object, key : NodePath) -> void:
+	var spawn = current_map.get_node(next_spawn)
+	player.position = spawn.position
+	# Fade back
+	$CanvasLayer/Fade.disconnect("tween_completed", self, "_on_kill_fadeout_complete")
+	$CanvasLayer/Fade.interpolate_property($CanvasLayer/FadeOut, "color", null, Color(0, 0, 0, 0), LEVEL_CHANGE_DELAY, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$CanvasLayer/Fade.start()
+
+func _on_map_change_fadeout_complete(object : Object, key : NodePath) -> void:
 	$CanvasLayer/Fade.stop_all()
 	if next_map != null:
 		_set_level(next_map)
@@ -68,6 +85,7 @@ func _set_level(scene : Node):
 		player.get_node("Camera2D").current = true
 
 	# Fade back
+	$CanvasLayer/Fade.disconnect("tween_completed", self, "_on_map_change_fadeout_complete")
 	$CanvasLayer/Fade.interpolate_property($CanvasLayer/FadeOut, "color", null, Color(0, 0, 0, 0), LEVEL_CHANGE_DELAY, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$CanvasLayer/Fade.start()
 

@@ -26,3 +26,6 @@ REM Static sprites
 
  %ASEPRITE% -b messagebox.ase^
  --save-as ..\res\messagebox.png
+
+ %ASEPRITE% -b spikes.ase^
+ --save-as ..\res\spikes.png
