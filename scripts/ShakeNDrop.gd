@@ -43,6 +43,7 @@ func _on_trigger_exited(body : PhysicsBody2D) -> void:
 
 func _on_fallen(object : Object, key : NodePath) -> void:
 	if triggered and should_reset:
+		$AudioStreamPlayer2D.play()
 		var map = get_viewport().get_node("World/Map")
 		var world_cam = map.find_node("Camera2D", true, false)
 		if world_cam != null:

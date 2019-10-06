@@ -24,8 +24,14 @@ func _on_door_interacted():
 		tie.buff_text(\"it open...\", 0.05)
 		tie.set_state(tie.STATE_OUTPUT)
 	elif interaction_cnt < 3:
+		var sound = get_viewport().get_node(\"World/Player/Player/KickSound\")
+		sound.volume_db = -20 + (interaction_cnt * 4)
+		sound.play()
 		get_node(\"../../Camera2D\").add_trauma(interaction_cnt * 0.2)
 	elif interaction_cnt < 4:
+		var sound = get_viewport().get_node(\"World/Player/Player/KickSound\")
+		sound.volume_db = 0
+		sound.play()
 		get_node(\"../../Camera2D\").add_trauma(1)
 		door.open()
 	else:

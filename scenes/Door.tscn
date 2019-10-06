@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scripts/Door.gd" type="Script" id=1]
 [ext_resource path="res://res/door.png" type="Texture" id=2]
 [ext_resource path="res://res/interact.png" type="Texture" id=3]
+[ext_resource path="res://res/DoorOpened.wav" type="AudioStream" id=4]
+[ext_resource path="res://res/DoorClosed.wav" type="AudioStream" id=5]
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=1]
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -31,7 +33,7 @@ tracks/1/keys = {
 "values": [ Vector2( 0, 0 ) ]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=2]
 length = 0.1
 loop = true
 tracks/0/type = "value"
@@ -59,7 +61,7 @@ tracks/1/keys = {
 "values": [ Vector2( 0, 0 ) ]
 }
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 8, 12 )
 
 [node name="Door" type="Node2D"]
@@ -74,8 +76,8 @@ region_enabled = true
 region_rect = Rect2( 0, 0, 64, 64 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/Open = SubResource( 3 )
-anims/Outdoor = SubResource( 4 )
+anims/Open = SubResource( 1 )
+anims/Outdoor = SubResource( 2 )
 
 [node name="InteractIndicator" type="Sprite" parent="."]
 visible = false
@@ -87,4 +89,10 @@ editor/display_folded = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2( 8, -12 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
+
+[node name="OpenSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
+
+[node name="ClosedSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )

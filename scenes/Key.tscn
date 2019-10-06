@@ -2,7 +2,7 @@
 
 [ext_resource path="res://res/key.png" type="Texture" id=1]
 
-[sub_resource type="GDScript" id=2]
+[sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
 
 func _ready():
@@ -13,9 +13,10 @@ func _on_pickup_entered(body : PhysicsBody2D) -> void:
 	var player := body as Player
 	if player != null:
 		player.has_key = true
-		get_parent().remove_child(self)"
+		get_parent().remove_child(self)
+		player.get_node(\"KeyPickupSound\").play()"
 
-[sub_resource type="Animation" id=1]
+[sub_resource type="Animation" id=2]
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -46,7 +47,7 @@ tracks/1/keys = {
 extents = Vector2( 8, 8 )
 
 [node name="Key" type="Node2D"]
-script = SubResource( 2 )
+script = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 8, -8 )
@@ -57,7 +58,7 @@ region_enabled = true
 region_rect = Rect2( 0, 0, 32, 32 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/Idle = SubResource( 1 )
+anims/Idle = SubResource( 2 )
 
 [node name="PickupArea" type="Area2D" parent="."]
 

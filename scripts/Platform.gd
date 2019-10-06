@@ -6,6 +6,12 @@ export(int) var speed := 32
 onready var initial_pos: Vector2 = position
 onready var tween: Tween = $Tween
 
+func reset():
+	tween.stop_all()
+	position = initial_pos
+	_swap_direction(null, null)
+	tween.start()
+
 func _ready():
 	tween.connect("tween_completed", self, "_swap_direction")
 	_swap_direction(null, null)

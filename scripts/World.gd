@@ -26,10 +26,8 @@ func _ready():
 	player = player_scn
 	$Player.add_child(player)
 
-#	next_spawn = "Spawn"
-#	_set_level(map_cell_scn)
-	next_spawn = "CellDoor"
-	_set_level(block_scn)
+	next_spawn = "Spawn"
+	_set_level(map_cell_scn)
 
 func change_level(name : String, spawn : String) -> void:
 	player.allow_input = false
@@ -41,6 +39,7 @@ func change_level(name : String, spawn : String) -> void:
 	$CanvasLayer/Fade.start()
 
 func kill_and_reset_player() -> void:
+	player.get_node("HurtSound").play()
 	# Fade out
 	$CanvasLayer/Fade.connect("tween_completed", self, "_on_kill_fadeout_complete")
 	$CanvasLayer/Fade.interpolate_property($CanvasLayer/FadeOut, "color", Color(0, 0, 0, 0), Color.black, KILL_RESET_DELAY, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
@@ -118,3 +117,5 @@ func reset(node : Node):
 			reset(n)
 		if n.name.match("DropBlock*"):
 			n.position = n.initial_position
+		elif n.name.match("Platform*") and not n.name.match("*ing*"):
+			n.reset()
