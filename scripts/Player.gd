@@ -11,6 +11,7 @@ const AIR_DAMP = 0.05
 signal landed
 
 var allow_input = true
+var has_key = false
 var velocity = Vector2()
 
 func _physics_process(delta):

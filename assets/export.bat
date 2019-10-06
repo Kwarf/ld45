@@ -17,6 +17,12 @@ REM Animated sprites
  --sheet ..\res\door.png^
  --data ..\res\door.json
 
+%ASEPRITE% -b key.ase^
+ --list-tags^
+ --sheet-pack^
+ --sheet ..\res\key.png^
+ --data ..\res\key.json
+
 REM Static sprites
 %ASEPRITE% -b platform.ase^
  --save-as ..\res\platform.png

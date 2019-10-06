@@ -28,7 +28,7 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("interact"):
 		emit_signal("interacted")
 		if interactable:
-			if not locked:
+			if not locked or player.has_key:
 				open()
 			else:
 				var tie = get_viewport().get_node("World").find_node("TextInterfaceEngine") as TextInterfaceEngine

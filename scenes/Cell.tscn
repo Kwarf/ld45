@@ -56,7 +56,7 @@ tile_data = PoolIntArray( 196609, 4, 0 )
 [node name="Door" parent="." instance=ExtResource( 2 )]
 position = Vector2( 72, 64 )
 target_map = "Block"
-target_spawn = "Door"
+target_spawn = "CellDoor"
 locked = true
 interactable = false
 

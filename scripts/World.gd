@@ -4,10 +4,12 @@ class_name GameWorld
 onready var player_scn: Node = load("res://scenes/Player.tscn").instance()
 onready var map_cell_scn: Node = load("res://scenes/Cell.tscn").instance()
 onready var block_scn: Node = load("res://scenes/Block.tscn").instance()
+onready var platforming_scn: Node = load("res://scenes/Platforming.tscn").instance()
 
 onready var maps: Array = [
 	map_cell_scn,
-	block_scn
+	block_scn,
+	platforming_scn
 ]
 
 var player: Player = null
@@ -24,8 +26,8 @@ func _ready():
 
 #	next_spawn = "Spawn"
 #	_set_level(map_cell_scn)
-	next_spawn = "Door"
-	_set_level(block_scn)
+	next_spawn = "BlockDoor"
+	_set_level(platforming_scn)
 
 func change_level(name : String, spawn : String) -> void:
 	player.allow_input = false
